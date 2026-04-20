@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 340px; font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+
+    .header {
+      background: #1e293b;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #334155;
+    }
+    .header h1 { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+    .header p  { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+    .body { padding: 16px; }
+
+    .url-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-bottom: 14px;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: none;
+      background: #6366f1;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover   { background: #4f46e5; }
+    .btn:disabled { background: #334155; cursor: not-allowed; }
+
+    .result {
+      display: none;
+      margin-top: 14px;
+      border-radius: 12px;
+      padding: 16px;
+      border: 2px solid;
+    }
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .verdict  { font-size: 17px; font-weight: 800; }
+    .score    { font-size: 32px; font-weight: 800; line-height: 1; }
+    .score span { font-size: 14px; }
+
+    .factors { margin-top: 10px; }
+    .factor-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    .meta { font-size: 10px; color: #64748b; margin-top: 10px; text-align: center; }
+
+    .loading { text-align: center; padding: 20px; color: #64748b; font-size: 13px; }
+    .error   { background: #450a0a; border: 1px solid #7f1d1d; border-radius: 10px;
+               padding: 12px; margin-top: 12px; color: #fca5a5; font-size: 12px; }
+
+    .settings {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #475569;
+    }
+    .toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    input[type=checkbox] { accent-color: #6366f1; width: 14px; height: 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span style="font-size:22px">🛡️</span>
+    <div>
+      <h1>PhishGuard AI</h1>
+      <p>Detector de phishing en tiempo real</p>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="url-box" id="currentUrl">Cargando URL...</div>
+
+    <button class="btn" id="analyzeBtn" onclick="analyzeCurrentUrl()">
+      Analizar esta URL
+    </button>
+
+    <div id="loading" class="loading" style="display:none">
+      🔍 Analizando con IA...
+    </div>
+
+    <div id="result" class="result"></div>
+    <div id="error" class="error" style="display:none"></div>
+
+    <div class="settings">
+      <label class="toggle">
+        <input type="checkbox" id="checkSSL" checked>
+        Incluir análisis SSL
+      </label>
+      <span id="timing"></span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
