@@ -24,32 +24,53 @@ async function analyzeCurrentUrl() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const url = tab.url;
 
+  console.log("Analizando URL:", url);
+  console.log("API endpoint:", API);
+
   if (!url || url.startsWith("chrome://")) {
     showError("No se puede analizar páginas internas de Chrome.");
     return;
   }
 
   btn.disabled = true;
+  btn.textContent = "Conectando...";
   loading.style.display = "block";
   resultDiv.style.display = "none";
   errorDiv.style.display = "none";
 
   try {
+    console.log("Enviando request a:", `${API}/analyze`);
+    
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 35000); // 35s timeout para Render
+
     const res = await fetch(`${API}/analyze`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, check_ssl: checkSSL })
+      body: JSON.stringify({ url, check_ssl: checkSSL }),
+      signal: controller.signal
     });
 
-    if (!res.ok) throw new Error(`Error ${res.status}`);
+    clearTimeout(timeout);
+    console.log("Response status:", res.status);
+
+    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+    
     const data = await res.json();
+    console.log("Resultado:", data);
     renderResult(data);
     document.getElementById("timing").textContent = `${data.analysis_time_ms}ms`;
 
   } catch (e) {
-    showError(`No se pudo conectar con PhishGuard API.\n¿Está corriendo el servidor en localhost:8000?`);
+    console.error("Error completo:", e);
+    if (e.name === "AbortError") {
+      showError("Timeout — el servidor tardó más de 35s.\nRender puede estar durmiendo.\nIntenta de nuevo en 30 segundos.");
+    } else {
+      showError(`Error: ${e.message}\n\nVerifica que ${API}/health responde en el navegador.`);
+    }
   } finally {
     btn.disabled = false;
+    btn.textContent = "Analizar esta URL";
     loading.style.display = "none";
   }
 }
@@ -92,10 +113,10 @@ function renderResult(data) {
 function showError(msg) {
   const div = document.getElementById("error");
   div.style.display = "block";
+  div.style.whiteSpace = "pre-line";
   div.textContent = "⚠️ " + msg;
 }
 
-// Mostrar URL actual al abrir el popup
 document.addEventListener("DOMContentLoaded", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const urlBox = document.getElementById("currentUrl");
