@@ -22,10 +22,15 @@ async function analyzeCurrentUrl() {
   const checkSSL = document.getElementById("checkSSL").checked;
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  const url = tab.url;
+  let url = tab.url;
 
-  console.log("Analizando URL:", url);
-  console.log("API endpoint:", API);
+  // Limpiar URL — quedarse solo con protocolo + dominio + path corto
+  try {
+    const parsed = new URL(url);
+    url = parsed.origin + parsed.pathname;
+  } catch(e) {}
+
+  console.log("Analizando URL limpia:", url);
 
   if (!url || url.startsWith("chrome://")) {
     showError("No se puede analizar páginas internas de Chrome.");
