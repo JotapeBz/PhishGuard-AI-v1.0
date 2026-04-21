@@ -6,3 +6,4 @@ data/raw/
 *.zip
 node_modules/
 frontend/dist/
+data/processed/

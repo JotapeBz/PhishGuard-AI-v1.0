@@ -76,9 +76,16 @@ async def root():
 
 @app.get("/health")
 async def health():
+    # Railway necesita 200 siempre, incluso si el modelo aún carga
+    return {"status": "ok", "model_loaded": model is not None}
+
+@app.get("/")
+async def root():
     return {
-        "status": "ok",
-        "model_loaded": model is not None
+        "name": "PhishGuard AI",
+        "status": "running",
+        "model_loaded": model is not None,
+        "endpoints": ["/analyze", "/health", "/docs"]
     }
 
 @app.post("/analyze", response_model=AnalyzeResponse)
