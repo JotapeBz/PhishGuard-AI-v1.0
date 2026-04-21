@@ -118,9 +118,14 @@ function showError(msg) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Registrar el click del botón aquí
+  document.getElementById("analyzeBtn").addEventListener("click", analyzeCurrentUrl);
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const urlBox = document.getElementById("currentUrl");
   if (tab?.url) {
-    urlBox.textContent = tab.url.length > 60 ? tab.url.slice(0, 60) + "..." : tab.url;
+    urlBox.textContent = tab.url.length > 60
+      ? tab.url.slice(0, 60) + "..."
+      : tab.url;
   }
 });
