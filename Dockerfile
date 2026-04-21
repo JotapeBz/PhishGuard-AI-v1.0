@@ -7,9 +7,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 COPY models/ ./models/
-COPY start.sh ./start.sh
-RUN chmod +x start.sh
 
-EXPOSE 8000
-
-CMD ["./start.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
