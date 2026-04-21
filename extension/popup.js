@@ -1,4 +1,4 @@
-const API = "https://phishguard-ai-v1-0.onrender.com/docs";
+const API = "https://phishguard-ai-v1-0.onrender.com";
 
 const COLORS = {
   LOW:      { bg: "#f0fdf4", border: "#22c55e", text: "#15803d" },
