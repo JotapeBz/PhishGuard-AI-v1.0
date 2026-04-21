@@ -17,7 +17,10 @@ from app.analyzers.ssl_analyzer import SSLAnalyzer
 app = FastAPI(
     title="PhishGuard AI",
     description="Motor de detección de phishing en tiempo real",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 app.add_middleware(
