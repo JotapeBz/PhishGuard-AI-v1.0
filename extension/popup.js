@@ -1,4 +1,4 @@
-const API = "http://localhost:8000";
+const API = "https://phishguard-ai-v1-0.onrender.com/docs";
 
 const COLORS = {
   LOW:      { bg: "#f0fdf4", border: "#22c55e", text: "#15803d" },
